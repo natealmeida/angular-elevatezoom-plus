@@ -103,14 +103,26 @@
                     bootstrapped = true;
                 } else {
                     var plugin = angular.element($element).data('ezPlus');
-                    plugin.destroy();
                     angular.extend(options, $scope.ezpOptions);
                     if (plugin) {
+                        plugin.destroy();
                         angular.element($element).ezPlus(options);
+                        window.setTimeout(function() {
+                            updateModel($scope.ezpModel);
+                        }, 0);
                     }
                 }
             }, true);
-            $scope.$watch('ezpModel', function (newValue, oldValue) {
+            $scope.$watch('ezpModel', updateModel);
+
+            $scope.$on('$destroy', function () {
+                var plugin = angular.element($element).data('ezPlus');
+                if (plugin) {
+                    plugin.destroy();
+                }
+            });
+            
+            function updateModel(newValue) {
                 var image = newValue;
                 var thumbUrl = (image && image.thumb) || '';
                 var smallUrl = (image && image.small) || '';
@@ -155,14 +167,7 @@
                     }
                     return initialUrl;
                 }
-            });
-
-            $scope.$on('$destroy', function () {
-                var plugin = angular.element($element).data('ezPlus');
-                if (plugin) {
-                    plugin.destroy();
-                }
-            });
+            }
 
             function hideZoom() {
                 var action = 'hide';
