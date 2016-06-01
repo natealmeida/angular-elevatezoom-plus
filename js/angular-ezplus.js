@@ -109,7 +109,7 @@
                         angular.element($element).ezPlus(options);
                         window.setTimeout(function() {
                             updateModel($scope.ezpModel);
-                        }, 0);
+                        }, 100);
                     }
                 }
             }, true);
